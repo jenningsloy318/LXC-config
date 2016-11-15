@@ -1,0 +1,25 @@
+
+Container and host are in one subnet,192.16.0.0/24,macvlan0 is created ontop of wlan0, the host is connected to router with wlan0
+ENV
+Router:192.168.0.254
+wlan0:192.168.0.201
+container:192.168.0.0/25(192.168.0.1~192.168.0.127)
+
+1 iptables NAT setting
+#iptables -t nat -A POSTROUTING -s 192.168.100.0/24 -o wlan0 -j MASQUERADE 
+2 for the config file of the container, set the wlan0's ip address as its gateway 
+3 add a route in the container.
+#route add -net 192.168.0.0/24 gw 192.168.0.201
+
+Container and host are in different subnets, the host is in 192.16.0.0/24 and container use 192.16.100.0/24, macvlan0 created ontop of wlan0,the host is connected to router with wlan0
+Router:192.168.0.254
+wlan0:192.168.0.201
+container:192.168.100.0/24
+
+1 iptables NAT setting
+#iptables -t nat -A POSTROUTING  -o wlan0 -j MASQUERADE 
+2 for the config file of the container, set the wlan0's ip address as its gateway 
+3 on the host, add a route 
+#route add -net 192.168.100.0/24 dev macvlan0
+4 in the container,add a route 
+#route add -net 192.168.100.0/24 gw 192.168.0.201

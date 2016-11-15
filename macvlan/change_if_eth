@@ -1,0 +1,6 @@
+Edit /etc/default/grub
+At the end of GRUB_CMDLINE_LINUX line append "net.ifnames=0 biosdevname=0"
+Save the file
+Type "grub2-mkconfig -o /boot/grub2/grub.cfg"
+Type "reboot"
+
